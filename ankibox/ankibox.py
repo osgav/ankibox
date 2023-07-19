@@ -14,6 +14,32 @@ from app_config import Config
 
 
 
+
+class VaultIndex:
+    '''
+    '''
+    def __init__(self):
+        self.log = logging.getLogger(self.__class__.__name__)
+        self.vault_root = Config.get_config_item("vault_root")
+
+        self.index = []
+        for dir, subdir, files in os.walk(self.vault_root):
+            for file in files:
+                self.index.append("{}/{}".format(dir, file))
+
+
+    def get_note_filepath(self, title):
+        '''
+        '''
+        #
+        # insert logic here that searches "self.index"
+        # for "title" and returns whole item that matches first...
+        #
+        pass
+
+
+
+
 class Note:
     '''
     a Note is a markdown file

@@ -3,6 +3,7 @@
 #
 
 anki_card_tag = "#0/anki/card"
+vault_root = "/home/doj/lab/obsidian/ankiboxtestvault/"
 
 # an ankibox has a `source` which is either a `folder` or a `file`
 # an ankibox requires a `name` 
