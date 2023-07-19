@@ -29,7 +29,7 @@ class ConfigValidator:
 
     def validate_config(self):
         self.check_folder_paths()
-        # self.check_file_paths()
+        self.check_file_paths()
 
     def check_folder_paths(self):
         # TODO: INSERT ERROR HANDLING HERE
