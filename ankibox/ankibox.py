@@ -228,33 +228,35 @@ class IWQueue(File):
     '''
     def __init__(self, config):
         super().__init__(config)
+        self.iw_queue_header_length = 7
+        # HARDCODED VALUE... IW queue file headers are 7 lines
 
 
-    def extract_note_titles(self):
+    def extract_note_title(self, line):
         '''
-        # AUGUST 2022 COMMENTS
-        this will be the "parser function" for this "source of notes" class
-        tasks:
-            open the IW queue file
-            process each line looking for [[note titles]]
-            add discovered note titles to a list
-            return the list
+        given a line from an IW queue, extract the title of the note
         '''
-        # AUGUST 2022 COMMENTS
-        #with open(self.filepath, 'r') as f:
-        #    queuefile = f.readlines()
-        # note_titles = regex_function_to_process_titles_from_list(queuefile)
-        notes_titles = [self.name, "note123", "note456", "note789", "note101112", "note131415"]
-        return notes_titles
+        line_parts = line.strip().split("|")
+        note_title = line_parts[1].strip(" []")
+        return note_title
 
 
     def get_snapshot(self):
-        note_titles = self.extract_note_titles()
-        item_count = len(note_titles)
+        '''
+        a snapshot is a list of Note objects
+        '''
+        with open(self.source_path, "r") as f:
+            filelines = f.readlines()
+
+        item_count = len(filelines) - self.iw_queue_header_length
         self.log.debug("{} items found in \"{}\"".format(item_count, self.name))
+
+        iw_queue_body = filelines[self.iw_queue_header_length:]
+
         notes = []
-        for note in note_titles:
-            notes.append(Note(note))
+        for line in iw_queue_body:
+            title = self.extract_note_title(line)
+            notes.append(Note(title, source="markdown_file"))
         return notes
 
 
