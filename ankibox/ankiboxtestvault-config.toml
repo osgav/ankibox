@@ -1,0 +1,27 @@
+#
+# ankibox script config
+#
+
+anki_card_tag = "#0/anki/card"
+
+# an ankibox has a `source` which is either a `folder` or a `file`
+# an ankibox requires a `name` 
+# an ankibox requires a `path` (to a folder or to a file)
+# an ankibox based on a file requires a `type`
+
+[[folder]]
+name = "TESTBOX"
+path = "/home/doj/lab/obsidian/ankiboxtestvault/0 INBOX/"
+
+# [[folder]]
+# name = "ABCBOX"
+# path = "/home/doj/lab/obsidian/ankiboxtestvault/1 PROJECTS/project ABC/"
+
+# [[folder]]
+# name = "XYZBOX"
+# path = "/home/doj/lab/obsidian/ankiboxtestvault/1 PROJECTS/project XYZ/"
+
+[[file]]
+name = "IW test"
+path = "/home/doj/lab/obsidian/ankiboxtestvault/2 AREAS/Writing/IW-Queues/IW-test.md"
+type = "IWQueue"
