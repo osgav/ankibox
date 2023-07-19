@@ -203,44 +203,33 @@ class File:
 
     a note with an unknown structure of text inside
 
-    this class should be a parent class with basic file
-    attributes only, e.g. 'name' and 'path'
+    this is a parent class that should be inherited from
 
-    child classes should inherit from this, and then implement
-    functionality required for handling specific file types,
-    e.g. an IW Queue note, or a MOC note, or something else
+    child classes should provide the implementation for
+    getting a snapshot of the source of notes
     '''
-    def __init__(self):
+    def __init__(self, config):
         self.log = logging.getLogger(self.__class__.__name__)
+        self.name = config['name']
+        self.source_path = config['path']
+        self.log.debug("initialized Source (File) for \"{}\"".format(self.name))
 
 
 
 
 class IWQueue(File):
     '''
-    # AUGUST 2022 COMMENTS
     an IW Queue is a text file 
-    it is managed by the Obsidian plugin "Incremental Writing"
+    it is edited by the Obsidian plugin "Incremental Writing"
 
     this class represents that text file
-    it's purpose is to return a list of Note objects
     
-    this is a "source of notes" class...
-    
-    it's purpose is to translate a "source of notes" (an IW Queue in this
-    case) into an object that this script can use to programmatically process
-    that source of notes
+    the purpose of this class is to return a list of Note objects
     '''
-    # IWQUEUE_DIR = "/home/doj/scratch/IW-Queues/"
-    # def __init__(self, name):
-        # self.name = name
-        # self.filename = name + ".md"
-        # self.filepath = self.IWQUEUE_DIR + self.filename
     def __init__(self, config):
-        self.log = logging.getLogger(self.__class__.__name__)
-        self.name = config['name']
-        self.log.debug("initialized Source (IWQueue) for \"{}\"".format(self.name))
-    # def extract_note_titles(self, queuefile):
+        super().__init__(config)
+
+
     def extract_note_titles(self):
         '''
         # AUGUST 2022 COMMENTS
@@ -257,7 +246,8 @@ class IWQueue(File):
         # note_titles = regex_function_to_process_titles_from_list(queuefile)
         notes_titles = [self.name, "note123", "note456", "note789", "note101112", "note131415"]
         return notes_titles
-    # def get_notes_on_queue(self):
+
+
     def get_snapshot(self):
         note_titles = self.extract_note_titles()
         item_count = len(note_titles)
@@ -836,9 +826,9 @@ class App:
         source_folders = []
         for config in Config.get_config_item("folder"):
             source_folders.append(config)
-        # source_files = []
-        # for config in Config.get_config_item("file"):
-        #     source_files.append(config)
+        source_files = []
+        for config in Config.get_config_item("file"):
+            source_files.append(config)
         
         for folder in source_folders:
             name = folder['name']
@@ -849,17 +839,17 @@ class App:
             ankinote = AnkiNote(folder, "folder")
             ankibox = AnkiBox(name, action, ankinote, source)
 
-        # for file in source_files:
-        #     name = file['name']
-        #     self.print_divider(name)
-        #     self.log.debug("initializing \"{}\"".format(name))
-        #     action = self.cli
-        #     source = IWQueue(file)
-        #     # 'source' should be set via some logic that figures
-        #     # out which "source of notes" class is appropriate
-        #     # based on file['type']
-        #     ankinote = AnkiNote(file, "file")
-        #     ankibox = AnkiBox(name, action, ankinote, source)
+        for file in source_files:
+            name = file['name']
+            self.print_divider(name)
+            self.log.debug("initializing \"{}\"".format(name))
+            action = self.cli
+            source = IWQueue(file)
+            # 'source' should be set via some logic that figures
+            # out which "source of notes" class is appropriate
+            # based on file['type']
+            ankinote = AnkiNote(file, "file")
+            ankibox = AnkiBox(name, action, ankinote, source)
 
         self.log.debug("done.")
         print("")
