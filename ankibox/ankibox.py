@@ -18,14 +18,19 @@ from app_config import Config
 class VaultIndex:
     '''
     '''
+
+    _index = None
+
     def __init__(self):
         self.log = logging.getLogger(self.__class__.__name__)
         self.vault_root = Config.get_config_item("vault_root")
 
-        self.index = []
+        VaultIndex._index = []
         for dir, subdir, files in os.walk(self.vault_root):
             for file in files:
-                self.index.append("{}/{}".format(dir, file))
+                VaultIndex._index.append("{}/{}".format(dir, file))
+
+        self.log.debug("done.")
 
 
     def get_note_filepath(self, title):
@@ -846,6 +851,9 @@ class App:
 
         self.log.debug("loading config file...")
         Config(self.cli)
+
+        self.log.debug("initializing VaultIndex...")
+        VaultIndex()
 
 
     def run(self):
