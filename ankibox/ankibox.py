@@ -318,8 +318,8 @@ class AnkiNote:
         elif self.source_type == "file":            
             # check if an ankinote exists in the expected location... which is...
             # a "centralised" location for all File-based ankibox ankinotes
-            ANKINOTE_STORAGE = "/home/doj/lab/system/obsidian-scripts/new_ankibox_script/testvault/2 AREAS/_system/ankinotes/" # HARDCODED VALUE ...
-            self.ankinote_path = "{}/{}.md".format(ANKINOTE_STORAGE, self.name)
+            ankinote_storage = Config.get_config_item("file_ankinote_storage")
+            self.ankinote_path = "{}/ANKIBOX {}.md".format(ankinote_storage, self.name)
             if os.path.isfile(self.ankinote_path):
                 self.log.debug("found existing ankinote")
                 return True
