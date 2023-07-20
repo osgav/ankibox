@@ -37,9 +37,14 @@ class VaultIndex:
     def get_note_filepath(filename):
         '''
         '''
-        for filepath in VaultIndex._index:
-            if filename in filepath:
-                return filepath
+        if "/" in filename:
+            for filepath in VaultIndex._index:
+                if filename in filepath:
+                    return filepath
+        else:
+            for filepath in VaultIndex._index:
+                if "/{}".format(filename) in filepath:
+                    return filepath
 
 
 
