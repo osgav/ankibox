@@ -262,13 +262,9 @@ class Folder:
         self.log.debug("{} items found in \"{}\"".format(item_count, self.name))
 
         notes = []
-        details = {}
-        details['source_path'] = self.source_path
-        markdown_file = {'markdown_file': details}
-
         for file in md_files:
             title = file[:-3] # remove ".md" file extension
-            notes.append(Note(title, source="markdown_file", **markdown_file))
+            notes.append(Note(title, source="markdown_file"))
         return notes
 
 
