@@ -34,14 +34,12 @@ class VaultIndex:
 
 
     @staticmethod
-    def get_note_filepath(title):
+    def get_note_filepath(filename):
         '''
         '''
-        #
-        # insert logic here that searches "VaultIndex._index"
-        # for "title" and returns whole item that matches first...
-        #
-        pass
+        for filepath in VaultIndex._index:
+            if filename in filepath:
+                return filepath
 
 
 
