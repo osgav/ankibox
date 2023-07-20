@@ -669,7 +669,7 @@ class AnkiBox:
         self.action_required_prompt("add operation completed, go run Obsidian_to_Anki plugin!")
 
         # boom, add operation is done
-        print("added {} old notes.".format(count_source_new))
+        print("added {} new notes.".format(count_source_new))
         print("add operation completed.")
 
     
