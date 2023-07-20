@@ -33,11 +33,12 @@ class VaultIndex:
         self.log.debug("done.")
 
 
-    def get_note_filepath(self, title):
+    @staticmethod
+    def get_note_filepath(title):
         '''
         '''
         #
-        # insert logic here that searches "self.index"
+        # insert logic here that searches "VaultIndex._index"
         # for "title" and returns whole item that matches first...
         #
         pass
@@ -62,12 +63,8 @@ class Note:
 
         anything else is invalid.
 
-        **kwargs should pass in one of:
-        - {'markdown_file' : details}
+        **kwargs should optionally pass in:
         - {'ankinote': details}
-
-        where markdown_file 'details' is a dictionary containing:
-        - source_path (the path to the directory being ankibox'd)
 
         where ankinote 'details' is a dictionary containing:
         - content (the "back of the card")
@@ -79,73 +76,18 @@ class Note:
 
         self.title = title
         self.filename = self.title + ".md"
-        
-        # self.filepath = self.locate_note()
-        #
-        # this is moving to *after* self.source stuff, because
-        # i will be determining the filepath differently initially...
-        # once i implement locate_note() - which i will have to eventually - i
-        # can go back to this being a "simple" class instance property up here...
-        #
-        # in other comments i have been debating whether or not locate_note() should
-        # be run every time a Note is instantiated...
-        # currently i believe the answer is *yes* and consequently this will
-        # necessitate the creation of a "vault index" that locate_note() can consult
-        # so that i don't perform hundreds of os.walks unnecessarily
-        #
+        self.filepath = VaultIndex.get_note_filepath(self.filename)
         
         self.source = source
         
         if self.source == "ankinote":
             self.anki_id = kwargs['ankinote']['obsidian_to_anki_id']
-            #
             # this either:
             # - sets self.anki_id to "None"
             # - sets self.anki_id to something like "<!--ID: 1685461928651-->"
-            #
-            self.filepath = kwargs['ankinote']['filepath']
 
         if self.source == "markdown_file":
             self.anki_id = None
-            self.filepath = "{}/{}".format(kwargs['markdown_file']['source_path'], self.filename)
-            #
-            # TODO: use locate_note() for this once it exists
-            #
-            # why? for consistency reasons. a Note object will be able
-            # to derive filepath from "title" alone regardless of whether
-            # that title came from a parsed ankinote entry or from the name
-            # of the markdown file itself.
-            #
-
-
-    def locate_note(self):
-        #
-        # this locate_note() function is going to be required for:
-        #
-        # - turning a File-based Note's title into a filepath
-        #
-        # why? because [[a wikilink note title]] can link to anywhere in my vault,
-        # so unlike a Folder-based Note it is not already known where it is (the 
-        # config.toml item "path" for a folder provides the path to the markdown file
-        # as well as the folder that is being ankibox'd)
-        #
-        # once this function exists to enable the File-based sources to
-        # have self.filepath, i can switch a Folder-based source to use locate_note too
-        #
-        # this will simply the setting of self.filepath in Note.init
-        #
-
-        # TODO: some testing -->
-        #
-        # what if i add a note to an IW queue and...
-        # there is another note with that name in another folder?
-        # 
-        # hmmm... its possible the [[wikilink]] reference in the note would have a partial path prefix
-        # that indicates where it is in relation to the vault root...
-        # 
-        # i need to test this out.
-        #  
-        pass
 
 
     def chunk_style_first_line(self, delete=None):
