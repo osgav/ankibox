@@ -76,7 +76,7 @@ class Note:
 
         self.title = title
         self.filename = self.title + ".md"
-        self.filepath = VaultIndex.get_note_filepath(self.filename)
+        self.filepath = self.locate_note()
         
         self.source = source
         
@@ -88,6 +88,10 @@ class Note:
 
         if self.source == "markdown_file":
             self.anki_id = None
+
+
+    def locate_note(self):
+        return VaultIndex.get_note_filepath(self.filename)
 
 
     def chunk_style_first_line(self, delete=None):
