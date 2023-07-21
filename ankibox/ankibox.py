@@ -9,8 +9,8 @@ import argparse
 import logging
 import os
 
-# from ankibox.app_config import Config
-from app_config import Config
+from ankibox.app_config import Config
+# from app_config import Config
 
 
 
@@ -99,13 +99,13 @@ class Note:
 
     def chunk_style_first_line(self, delete=None):
 
-        # from ankibox.chunks import ankinote_chunk_first_line
-        # from ankibox.chunks import ankinote_chunk_first_line_with_id
-        # from ankibox.chunks import ankinote_chunk_first_line_delete
+        from ankibox.chunks import ankinote_chunk_first_line
+        from ankibox.chunks import ankinote_chunk_first_line_with_id
+        from ankibox.chunks import ankinote_chunk_first_line_delete
 
-        from chunks import ankinote_chunk_first_line
-        from chunks import ankinote_chunk_first_line_with_id
-        from chunks import ankinote_chunk_first_line_delete
+        # from chunks import ankinote_chunk_first_line
+        # from chunks import ankinote_chunk_first_line_with_id
+        # from chunks import ankinote_chunk_first_line_delete
 
         self.delete = delete
 
@@ -418,8 +418,8 @@ class AnkiNote:
         # string to that file first
         #
 
-        # from ankibox.chunks import ankinote_chunk_header
-        from chunks import ankinote_chunk_header
+        from ankibox.chunks import ankinote_chunk_header
+        # from chunks import ankinote_chunk_header
 
         with open (self.ankinote_path, "w") as f:
             f.write(ankinote_chunk_header.format(ankibox_name=self.name))
