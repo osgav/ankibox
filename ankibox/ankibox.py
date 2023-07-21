@@ -784,7 +784,7 @@ class App:
     def __init__(self, cli_args):
 
         logging.basicConfig(
-            level=logging.DEBUG, 
+            level=logging.INFO,
             # format='[%(asctime)s] [%(levelname)s] [%(name)s.%(funcName)s] %(message)s',
             format='[%(levelname)s] [%(name)s.%(funcName)s] %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S'
