@@ -108,6 +108,7 @@ class Config:
 
     def load_config_file(self):
         CONFIG = "/home/doj/.ankibox/config.toml" # HARDCODED VALUE ...
+        # CONFIG = "./ankiboxtestvault-config.toml" # HARDCODED VALUE ...
         with open(CONFIG, "rb") as f:
             Config._config = tomli.load(f)
 

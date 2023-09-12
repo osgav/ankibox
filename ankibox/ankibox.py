@@ -555,31 +555,59 @@ class AnkiBox:
 
     def summary_short(self):
         '''
-        print summary of ankibox state (numbers only)
+        print summary of ankibox state (new / old numbers only)
         '''
-        self.log.debug("printing summary (short)")
+        self.log.debug("printing summary (new shorter version of short")
         state = self.get_state()
         count_source_new = state['count_source_new']
         count_ankinote_old = state['count_ankinote_old']
-        count_source_total = state['count_source_total']
-        count_ankinote_total = state['count_ankinote_total']
-        print("")
-        print("{} new notes found in \"{}\" source".format(count_source_new, self.name))
-        print("{} old notes found in \"{}\" ankinote".format(count_ankinote_old, self.name))
-        print("")
-        print("{} notes found in \"{}\" source".format(count_source_total, self.name))
-        print("{} notes found in \"{}\" ankinote".format(count_ankinote_total, self.name))
-        print("")
+
+        clrz = {}
+        clrz['GREEN'] = '\033[92m'
+        clrz['YELLOW'] = '\033[93m'
+        clrz['ENDC'] = '\033[0m'
+        clrz['BOLD'] = '\033[1m'
+
+        if count_source_new > 0:
+            string_for_new = "{}{}{} new{}".format(
+                                                   clrz['BOLD'],
+                                                   clrz['GREEN'],
+                                                   count_source_new,
+                                                   clrz['ENDC']
+                                                   )
+        else:
+            string_for_new = "{} new".format(count_source_new)
+
+        if count_ankinote_old > 0:
+            string_for_old = "{}{}{} old{}".format(
+                                                   clrz['BOLD'],
+                                                   clrz['YELLOW'],
+                                                   count_ankinote_old,
+                                                   clrz['ENDC']
+                                                   )
+        else:
+            string_for_old = "{} old".format(count_ankinote_old)
+
+        print("{}\t {}\t  {}".format(
+                                            string_for_new,
+                                            string_for_old,
+                                            self.name
+                                            )
+        )
+
+
+    def print_divider(self, name):
+        dash_multiplier = 80 - 6 - len(name)
+        dashes = "-" * dash_multiplier
+        print("\n---> {} {}".format(name, dashes))
+
 
     def summary_long(self):
         '''
         print summary of ankibox state (numbers and note titles)
         '''
         self.log.debug("printing summary (long)")
-        #
-        # TODO: i should probably use summary_short() for the start here?
-        # then all this function needs to do is print new/old note names...
-        #
+        self.print_divider(self.name)
         state = self.get_state()
         count_source_new = state['count_source_new']
         count_ankinote_old = state['count_ankinote_old']
@@ -793,6 +821,8 @@ class App:
 
         self.log.debug("reading command line arguments...")
         self.cli = cli_args
+        if self.cli.summary:
+            print("")
 
         self.log.debug("loading config file...")
         Config(self.cli)
@@ -813,7 +843,6 @@ class App:
         
         for folder in source_folders:
             name = folder['name']
-            self.print_divider(name)
             self.log.debug("initializing \"{}\"".format(name))
             action = self.cli
             source = Folder(folder)
@@ -822,7 +851,6 @@ class App:
 
         for file in source_files:
             name = file['name']
-            self.print_divider(name)
             self.log.debug("initializing \"{}\"".format(name))
             action = self.cli
             source = IWQueue(file)
@@ -835,12 +863,6 @@ class App:
         self.log.debug("done.")
         print("")
         print("")
-
-    def print_divider(self, name):
-        dash_multiplier = 80 - 6 - len(name)
-        dashes = "-" * dash_multiplier
-        print("\n---> {} {}".format(name, dashes))
-
 
 
 
